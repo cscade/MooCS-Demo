@@ -65,7 +65,7 @@ window.addEvent('domready', function () {
 				});
 				document.id('connectionQuality' + instanceID).set('text', 'Connection quality: ' + rating + ' (' + average + ' seconds lag average, ' + controller.communications.responseTimes.length + ' samples)');
 			}).periodical(100);
-			collapse = new Collapsible('rawHeader' + instanceID, 'output' + instanceID);
+			collapse = new Collapsible.Header('rawHeader' + instanceID, 'output' + instanceID);
 			output = document.id('output' + instanceID);
 			Object.each(this.getCapabilities(), function (keys, section) {
 				var sectionEl = new Element('div.section');
