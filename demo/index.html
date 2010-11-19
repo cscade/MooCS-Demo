@@ -1,0 +1,49 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+	<link rel="stylesheet" href="/site.css" type="text/css" media="screen" title="no title" charset="utf-8">
+	<link rel="stylesheet" href="demo.css" type="text/css" media="screen" title="no title" charset="utf-8">
+
+	<title>MooCS Demo Page</title>
+	
+</head>
+
+<body>
+	<div class="navigation_indent">
+		<div class="tr"></div>
+		<div class="r"></div>
+		<div class="br"></div>
+		<div class="navigation">
+			<ul>
+				<li><a href="/">Introduction</a></li>
+				<li class="active">Live Demo</li>
+			</ul>
+		</div>
+	</div>
+	<div id="body">
+		<div class="stackRight library">MooCS Version: <span></span></div>
+		<div class="stackRight autorefresh">Auto refresh: <input type="checkbox" name="autoRefresh" value="" id="autoRefresh" /></div>
+		<h1>MooCS Live Demo</h1>
+		<p>Welcome to the MooCS live demo! This page is configured to automatically connect to the <a href="http://ecc.webhop.org:8081/">demo BCS unit</a> provided by <a href="http://embeddedcontrolconcepts.com/">Embedded Control Concepts</a>.</p>
+		<p>The auto refresh checkbox at right controls polling the unit(s) for data in this demo.</p>
+		<p>The demo unit occasionally goes offline, so please check back again or add your own BCS unit if it is unavailable.</p>
+		<h2 id="section_tempPlots">Temperature Plots</h2>
+		<div id="charts">
+			<p>Charts will refresh automatically every 5 seconds.</p>
+		</div>
+		<div id="raw"></div>
+		<h2>Add a BCS Device</h2>
+		<p>Name: <input type="text" name="input_Name" value="" id="input_Name">
+			Address: <input type="text" name="input_Address" value="" id="input_Address">
+			<input type="button" name="buttonAddDevice" value="Add" id="buttonAddDevice">
+		</p>
+	</div>
+<script src="http://localhost/build.php?scripts=Core/Fx.Tween"></script>
+<script src="lib/js/Collapsible.js" type="text/javascript" charset="utf-8"></script>
+<script src="/lib/js/JSCharts.js" type="text/javascript" charset="utf-8"></script>
+<script src="local.js" type="text/javascript" charset="utf-8"></script>
+</body>
+</html>
