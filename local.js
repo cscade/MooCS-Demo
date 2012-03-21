@@ -1,6 +1,6 @@
 /*	2010-10-27
 	Carson S. Christian
-	cchristian@moocsinterface.net
+	cc@amplego.com
 	
 	Local code for the Mooks page.
 */

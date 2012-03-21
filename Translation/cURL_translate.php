@@ -2,7 +2,7 @@
 /*	cURL_translate.php
 	2010-10-19
 	Carson S. Christian
-	cchristian@moocsinterface.net
+	cc@amplego.com
 	
 	Connection layer for BCS communication to/from an AJAX source.
 */
@@ -23,7 +23,7 @@
 $location = $_GET['location'];
 $target = $_GET['target'];
 $mode = $_GET['mode'];
-$message = $_GET['message'];
+$message = isset($_GET['message']) ? $_GET['message'] : null;
 
 // create curl resource 
 $ch = curl_init(); 
