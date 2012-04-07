@@ -17,17 +17,20 @@ window.addEvent('domready', function () {
 	// Page header details
 	$$('div.stackRight.library span').set('text', MooCS.$libraryVersion);
 	
+	// Add a device to the demo page
 	addDevice = function (name, address, translator) {
-		if (typeOf(name) !== 'string' || typeOf(address) !== 'string' || name.length < 1 || address.length < 7) {
-			alert('Supply a text name and TCP/IP address for the new contoller first.\n\nAddress should be in the form:\n192.168.0.1:80\nPort number is optional.');
+		if (typeOf(name) !== 'string' || typeOf(address) !== 'string' || name.length < 1 || address.length < 3) {
+			alert('Supply a text name and TCP/IP address for the new contoller first.\n\nAddress should be in the form:\n192.168.0.1:80\n-or-\nwww.mydeviceaddress.com\n\nPort number is optional.');
 			return;
 		}
-		// Initialize a new controller
+		
+		// Initialize a new instance of Device
 		console.log('Initializing a new device:', name, address, translator);
 		var controller = new MooCS.Device(name, {
 			location: address,
 			translator: translator
 		}, function () {
+			// New device initialized
 			var instanceID = String.uniqueID(),
 				chartData0 = [],
 				chartData1 = [],
@@ -37,23 +40,25 @@ window.addEvent('domready', function () {
 				autoUpdateChart, chart, output, collapse,
 				that = this;
 			
-			// Build example boxes for all supported dictionary entries
+			// DOM stuff for the demo
 			document.id('raw').adopt(
 				new Element('h2#rawHeader' + instanceID + '.sectionToggle', {
 					text: this.name + ' Raw Values'
 				}),
 				new Element('h3#connectionQuality' + instanceID, {
-					text: 'Connection quality: Good'
+					text: 'Connection quality: polling...'
 				}),
 				new Element('div#output' + instanceID)
 			);
+			
+			// Provide connection quality stats
 			(function () {
 				var ratings = {
-						'-0.1': 'Excellent',
-						'0.3': 'Good',
-						'1.0': 'Degraded',
-						'1.5': 'Poor',
-						'3.0': 'Terrible'
+						0: 'Excellent',
+						300: 'Good',
+						1000: 'Degraded',
+						1500: 'Poor',
+						3000: 'Terrible'
 					},
 					averages, rating = undefined;
 				
@@ -63,8 +68,10 @@ window.addEvent('domready', function () {
 						rating = r;
 					}
 				});
-				document.id('connectionQuality' + instanceID).set('text', 'Connection quality: ' + rating + ' (' + averages.read.average + ' seconds lag average, ' + averages.read.samples + ' samples)');
+				document.id('connectionQuality' + instanceID).set('text', 'Connection quality: ' + rating + ' (' + averages.read.average + 'ms lag average, ' + averages.read.samples + ' samples)');
 			}).periodical(5000);
+			
+			// Provide demo output for all supported dictionary data
 			collapse = new Collapsible.Header('rawHeader' + instanceID, 'output' + instanceID);
 			output = document.id('output' + instanceID);
 			Object.each(this.getCapabilities(), function (keys, section) {
@@ -79,13 +86,14 @@ window.addEvent('domready', function () {
 					keys.each(function (key) {
 						var p = new Element('p');
 						sectionEl.grab(p);
-						this.read(section, key, function (response) {
+						that.read(section, key, function (response) {
 							p.set('html', key + ': <strong>' + response + '</strong>');
 						}, true);
-					}.bind(this));
-				}.bind(this)));
-			}, this);
-			// Communications Inidicator
+					});
+				}).fireEvent('click'));
+			});
+			
+			// Show an indicator for when the device is being polled
 			this.addEvents({
 				communication: function () {
 					document.id('rawHeader' + instanceID).addClass('running');
@@ -94,7 +102,8 @@ window.addEvent('domready', function () {
 					document.id('rawHeader' + instanceID).removeClass('running');
 				}
 			});
-			// Chart
+			
+			// Demo chart of temperature data
 			document.id('charts').grab(new Element('div#chart' + instanceID + '.chart'));
 			chart = new JSChart('chart' + instanceID, 'line');
 			chart.setTitle(this.name + ', ' + this.options.location + ' - ' + ((this.BCS460) ? 'BCS-460' : (this.BCS462) ? 'BCS-462' : 'Unknown'));
@@ -141,10 +150,7 @@ window.addEvent('domready', function () {
 					}
 				}
 			}, true);
-			autoUpdateChart = function () {
-				if (chartData0.length < 1 || chartData1.length < 1 || chartData2.length < 1 || chartData3.length < 1) {
-					return;
-				}
+			var autoUpdateChart = function () {
 				chart.setDataArray(chartData0, '0');
 				chart.setDataArray(chartData1, '1');
 				chart.setDataArray(chartData2, '2');
@@ -154,13 +160,17 @@ window.addEvent('domready', function () {
 				chart.setLineColor('#3c7d96', '2');
 				chart.setLineColor('#4b9531', '3');
 				chart.draw();
-			}.periodical(5000);
+			};
+			autoUpdateChart.periodical(5000);
+			
+			// Auto-poll
+			document.id('autoRefresh').set('checked', false).fireEvent('change').set('checked', true).fireEvent('change');
 		});
 	};
 	
 	// Default Controllers
 	addDevice('DemoBCS', 'ecc.webhop.org:8081', '/Translation/cURL_translate.php');
-	addDevice('myBCS', '192.168.110.6', '/Translation/cURL_translate.php');
+	// addDevice('myBCS', '192.168.110.6', '/Translation/cURL_translate.php');
 	
 	// Polling
 	document.id('autoRefresh').addEvent('change', function () {
@@ -172,10 +182,9 @@ window.addEvent('domready', function () {
 			controller.poll[this.get('checked') ? 'start' : 'stop']();
 		}, this);
 	});
-	document.id('autoRefresh').set('checked', true).fireEvent('change');
 	
 	// Add Device Input
 	document.id('buttonAddDevice').addEvent('click', function () {
-		addDevice(document.id('input_Name').get('value'), document.id('input_Address').get('value'));
+		addDevice(document.id('input_Name').get('value'), document.id('input_Address').get('value'), '/Translation/cURL_translate.php');
 	});
 });

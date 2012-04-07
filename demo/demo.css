@@ -13,6 +13,7 @@ h2 {
 h2.sectionToggle {
 	cursor: pointer;
 	padding-left: 34px;
+	margin-top: 20px;
 	background: transparent url(images/loading-indicator-still.gif) no-repeat -9px;
 }
 
@@ -47,7 +48,8 @@ div.stackRight span {
 div.section {
 	border: 1px solid #d3dadc;
 	background-color: #f5fdf6;
-	float: left;
+	display: inline-block;
+	vertical-align: top;
 	padding: 10px;
 	clear: right;
 	position: relative;
