@@ -169,8 +169,8 @@ window.addEvent('domready', function () {
 	};
 	
 	// Default Controllers
-	addDevice('DemoBCS', 'ecc.webhop.org:8081', '/Translation/cURL_translate.php');
-	// addDevice('myBCS', '192.168.110.6', '/Translation/cURL_translate.php');
+	addDevice('DemoBCS', 'ecc.webhop.org:8081', '../Translation/cURL_translate.php');
+	// addDevice('myBCS', '192.168.110.6', '../Translation/cURL_translate.php');
 	
 	// Polling
 	document.id('autoRefresh').addEvent('change', function () {
@@ -185,6 +185,6 @@ window.addEvent('domready', function () {
 	
 	// Add Device Input
 	document.id('buttonAddDevice').addEvent('click', function () {
-		addDevice(document.id('input_Name').get('value'), document.id('input_Address').get('value'), '/Translation/cURL_translate.php');
+		addDevice(document.id('input_Name').get('value'), document.id('input_Address').get('value'), '../Translation/cURL_translate.php');
 	});
 });
